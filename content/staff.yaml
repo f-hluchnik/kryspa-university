@@ -1,0 +1,13 @@
+# role / department are placeholders; `department` is a folder name in content/departments/.
+- name: Kryšpa
+  role: Rektor
+- name: Vítek
+  role: Proděkan pro skotačení
+- name: Jana
+  role: Proděkanka pro skotačení
+- name: Jacob Collier
+  role: Děkan pro hudbu
+  department: hudebni
+- name: František
+  role: Vedoucí ústavu informatiky
+  department: informatiky

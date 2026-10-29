@@ -1,0 +1,20 @@
+{# Staff: content/staff.yaml, in file order. #}
+{% extends "base.html" %}
+
+{% block title %}Personál — {{ site.title }}{% endblock %}
+
+{% block content %}
+<h1 class="archive-title">Personál</h1>
+<ul class="staff-grid">
+  {% for p in staff %}
+  <li class="staff-card"{% if p.department %} style="--card: {{ p.department.color }}"{% endif %}>
+    <span class="avatar" aria-hidden="true">{{ p.name[0] }}</span>
+    <span class="staff-name">{{ p.name }}</span>
+    <span class="staff-role">{{ p.role }}</span>
+    {% if p.department %}
+    <a class="staff-dept" href="{{ p.department.url }}">{{ p.department.title }}</a>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

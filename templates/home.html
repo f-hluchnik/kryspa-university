@@ -1,0 +1,18 @@
+{# The map: one card per department. #}
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="archive-title">Katedry</h1>
+<ul class="dept-grid">
+  {% for d in departments %}
+  <li>
+    <a class="dept-card" href="{{ d.url }}" style="--card: {{ d.color }}">
+      <span class="dept-emoji" aria-hidden="true">{{ d.emoji }}</span>
+      <span class="dept-name">{{ d.title }}</span>
+      <span class="dept-summary">{{ d.summary }}</span>
+      <span class="dept-count">{{ d.posts | length }} příspěvků</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

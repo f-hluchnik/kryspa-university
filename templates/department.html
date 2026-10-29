@@ -1,0 +1,26 @@
+{# One department: its description and its posts. #}
+{% extends "base.html" %}
+
+{% block title %}{{ department.title }} — {{ site.title }}{% endblock %}
+{% block description %}{{ department.summary or site.description }}{% endblock %}
+
+{% block content %}
+<h1 class="archive-title">{{ department.emoji }} {{ department.title }}</h1>
+<div class="post-content intro">{{ department.content | safe }}</div>
+
+<ul class="post-list">
+  {% for post in department.posts %}
+  <li class="post-item">
+    <span class="post-date"><time datetime="{{ post.date.isoformat() }}">{{ post.date | format_date }}</time></span>
+    <a class="post-title" href="{{ post.url }}">{{ post.title }}</a>
+    {% if post.summary %}
+    <p class="post-summary">{{ post.summary }}</p>
+    {% endif %}
+  </li>
+  {% else %}
+  <li class="post-item">Zatím tu nic není.</li>
+  {% endfor %}
+</ul>
+
+<p class="back-link"><a href="/">&larr; Všechny katedry</a></p>
+{% endblock %}

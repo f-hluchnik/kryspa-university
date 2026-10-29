@@ -1,0 +1,407 @@
+/* 1. Theme tokens ------------------------------------------------------- */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: light-dark(#fff3c4, #1a0b3b);
+  --ink: light-dark(#2b1055, #ffe9a8);
+  --muted: light-dark(#6b4a9c, #c9a6ff);
+  --accent: light-dark(#ff2e88, #ff6bb5);
+  --accent-2: light-dark(#00a896, #3ef0d0);
+  --line: light-dark(#2b1055, #ffe9a8);
+  --code-bg: light-dark(#ffe08a, #2d1766);
+  --on-card: #2b1055; /* cards keep their own bright colour in both themes */
+
+  --sans: "Alegreya Sans", system-ui, sans-serif;
+  --display: "Baloo 2", "Alegreya Sans", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --measure: 880px;
+  --shadow: 5px 5px 0 var(--line);
+}
+
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+
+/* 2. Base --------------------------------------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image: radial-gradient(color-mix(in srgb, var(--accent) 22%, transparent) 2px, transparent 2px);
+  background-size: 28px 28px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.1rem; /* tuned for the Alegreya Sans x-height */
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 3px;
+}
+
+/* Present for screen readers and the document outline, absent on screen. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 3. Layout ------------------------------------------------------------- */
+
+.wrap {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+/* 4. Header ------------------------------------------------------------- */
+
+.site-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+.site-header-content { grid-column: 1; }
+
+.site-title {
+  font-family: var(--display);
+  font-size: 2.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none;
+  display: inline-block;
+  background: linear-gradient(90deg, var(--accent), #ff9f1c, var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: rotate(-1.5deg);
+  transition: transform 0.2s ease;
+}
+
+.site-title:hover { transform: rotate(1deg) scale(1.03); }
+
+.site-tagline {
+  margin: 0.35rem 0 1.1rem;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.site-nav { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+.site-nav a {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  padding: 0.15rem 0.9rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.site-nav a:hover {
+  background: var(--accent-2);
+  color: var(--on-card);
+  transform: translateY(-2px) rotate(-2deg);
+}
+
+/* Theme toggle. Hidden unless theme.js ran, because without JS the button
+   could not do anything. */
+#theme-toggle { display: none; }
+
+.has-js #theme-toggle {
+  grid-column: 2;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+#theme-toggle:hover { color: var(--accent); }
+
+/* Show the icon for the theme you would switch *to*. The media query covers
+   the moment before theme.js runs, and readers with JS disabled. */
+.sun-icon,
+.moon-icon { display: none; }
+
+.moon-icon { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .moon-icon { display: none; }
+  html:not([data-theme="light"]) .sun-icon { display: block; }
+}
+
+[data-theme="dark"] .moon-icon { display: none; }
+[data-theme="dark"] .sun-icon { display: block; }
+[data-theme="light"] .moon-icon { display: block; }
+[data-theme="light"] .sun-icon { display: none; }
+
+/* 5. Home map and staff cards -------------------------------------------- */
+
+.archive-title,
+.page-title {
+  font-family: var(--display);
+  font-size: 1.9rem;
+  margin: 0 0 1.5rem;
+}
+
+.dept-grid,
+.staff-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+}
+
+.dept-card,
+.staff-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  height: 100%;
+  padding: 1.25rem;
+  background: var(--card, var(--accent-2));
+  color: var(--on-card);
+  border: 3px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dept-grid li:nth-child(odd) .dept-card { transform: rotate(-1deg); }
+.dept-grid li:nth-child(even) .dept-card { transform: rotate(1deg); }
+
+.dept-card:hover {
+  transform: rotate(0) translateY(-4px) scale(1.02) !important;
+  box-shadow: 8px 8px 0 var(--accent);
+}
+
+.dept-emoji { font-size: 2.4rem; line-height: 1; }
+.dept-name { font-family: var(--display); font-size: 1.35rem; line-height: 1.2; }
+.dept-summary { font-size: 1rem; }
+.dept-count { margin-top: auto; padding-top: 0.5rem; font-family: var(--mono); font-size: 0.8rem; opacity: 0.75; }
+
+.staff-card { align-items: center; text-align: center; }
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+  border: 3px solid var(--on-card);
+  font-family: var(--display);
+  font-size: 1.8rem;
+}
+
+.staff-name { font-family: var(--display); font-size: 1.25rem; }
+.staff-role { font-size: 1rem; }
+.staff-dept { font-family: var(--mono); font-size: 0.8rem; }
+
+/* 6. Single item (post, page) and lists ---------------------------------- */
+
+.post-list { list-style: none; margin: 2rem 0 0; padding: 0; }
+
+.post-item {
+  margin-bottom: 1.2rem;
+  padding: 0.9rem 1.2rem;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg) 85%, var(--accent));
+}
+
+.post-item .post-title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  text-decoration: none;
+}
+
+.post-item .post-title:hover { color: var(--accent); }
+.post-summary { margin: 0.3rem 0 0; color: var(--muted); }
+
+.post-date {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.3rem;
+}
+
+article.post .post-date { margin-bottom: 0; }
+
+article.post .post-title {
+  display: block;
+  font-family: var(--display);
+  font-size: 2.3rem;
+  line-height: 1.2;
+  margin: 0.3rem 0 0.6rem;
+}
+
+.post-info { color: var(--muted); font-size: 0.9rem; }
+
+.back-link { margin-top: 3rem; font-size: 0.95rem; }
+
+.back-link a { color: var(--muted); text-decoration: none; }
+.back-link a:hover { color: var(--accent); }
+
+/* 7. Content typography -------------------------------------------------- */
+
+.post-content {
+  max-width: 42rem;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+.post-content.intro { margin-top: 0; }
+.post-content p { margin: 1.1em 0; }
+
+.post-content h2,
+.post-content h3,
+.post-content h4 { font-family: var(--display); }
+
+.post-content h2 { font-size: 1.5rem; margin: 2.2em 0 0.6em; }
+.post-content h3 { font-size: 1.2rem; margin: 1.8em 0 0.5em; }
+.post-content h4 { font-size: 1rem; margin: 1.6em 0 0.4em; }
+
+.post-content ul,
+.post-content ol { padding-left: 1.3rem; }
+
+.post-content li { margin: 0.4rem 0; }
+
+.post-content a {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.post-content a:hover { color: var(--accent); }
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin: 1.5rem 0;
+}
+
+.post-content code {
+  font-family: var(--mono);
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+
+.post-content pre {
+  background: var(--code-bg);
+  padding: 1rem;
+  overflow-x: auto;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+}
+
+.post-content pre code { background: none; padding: 0; }
+
+.post-content blockquote {
+  margin: 1.5em 0;
+  padding-left: 1rem;
+  border-left: 4px solid var(--accent);
+  color: var(--muted);
+}
+
+.post-content table {
+  width: 100%;
+  margin: 1.8em 0;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.post-content th,
+.post-content td {
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--line);
+  text-align: left;
+}
+
+.post-content th { background: var(--code-bg); }
+
+.post-content dt { font-family: var(--display); font-size: 1.2rem; margin-top: 1.8em; }
+.post-content dd { margin: 0.2em 0 0.8em; color: var(--muted); font-style: italic; }
+
+/* Emitted by the Markdown `footnotes` extension. */
+.footnote { font-size: 0.95rem; margin-top: 3rem; opacity: 0.85; }
+.footnote hr { margin-bottom: 1rem; }
+.footnote ol { padding-left: 1.5rem; }
+
+/* 8. Footer -------------------------------------------------------------- */
+
+.site-footer {
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 3px dashed var(--accent);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* 9. Preferences --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .wrap { padding: 2rem 1.25rem 4rem; }
+  .site-title { font-size: 1.9rem; }
+  article.post .post-title { font-size: 1.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* 10. Post "paper": same look as code blocks ------------------------------ */
+
+article.post,
+.post-item {
+  background: var(--code-bg);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+}
+
+article.post { padding: 1.5rem 1.75rem; box-shadow: var(--shadow); }
+
+/* Code inside the paper flips to the page colour so it stays visible. */
+article.post .post-content pre,
+article.post .post-content code { background: var(--bg); }
+
+@media (max-width: 480px) {
+  article.post { padding: 1.1rem 1rem; }
+}

@@ -1,0 +1,19 @@
+{# A single post. #}
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — {{ site.title }}{% endblock %}
+{% block description %}{{ post.summary or site.description }}{% endblock %}
+
+{% block content %}
+<article class="post">
+  <p class="post-date"><time datetime="{{ post.date.isoformat() }}">{{ post.date | format_date }}</time></p>
+  <h1 class="post-title">{{ post.title }}</h1>
+  {% if post.info %}
+    <p class="post-info">{{ post.info | join(" · ") }}</p>
+  {% endif %}
+  <div class="post-content">
+    {{ post.content | safe }}
+  </div>
+  <p class="back-link"><a href="{{ department.url }}">&larr; {{ department.title }}</a></p>
+</article>
+{% endblock %}
