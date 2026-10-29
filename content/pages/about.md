@@ -2,4 +2,4 @@
 title: O univerzitě
 ---
 
-Toto jsou stránky Kryšpovy univerzity, Fakulty skotačení.
+Toto jsou oficiální stránky Kryšpovy univerzity, Fakulty skotačení.
